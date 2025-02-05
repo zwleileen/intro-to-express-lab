@@ -1,18 +1,33 @@
-//configs go here
 const express = require("express");
 const morgan = require("morgan");
 const app = express();
 const port = 3000;
 
-//middleware goes here, and intercept incoming requests
 app.use(morgan("dev"));
 
-//requests go here
+//Exercise 1. Be Polite, Greet the User
+app.get("/greetings/:name", (req, res) => {
+  const name = req.params.name;
+  res.send(`Hello there, ${name}!`);
+});
+//URL is http://localhost:3000/greetings/Christy
+
+//Exercise 2. Rolling the Dice
+app.get("/roll/:number", (req, res) => {
+  const number = req.params.number; //retrieves the number from the URL as a string
+  if (isNaN(number)) {
+    return res.send("You must specify a number.");
+  }
+  const randomNum = parseInt(number); //converts string input from URL parameter into integer
+  const result = Math.floor(Math.random() * (randomNum + 1));
+  res.send(`You rolled a ${result}`);
+});
+//URL is http://localhost:3000/roll/6
+
 app.get("/", (req, res) => {
-  res.send("<h1>Hello Express!</h1>");
+  res.send();
 });
 
-//URL is http://localhost:3000/about?name=Eileen&age=35
 app.get("/about", (req, res) => {
   const name = req.query.name;
   const age = req.query.age;
