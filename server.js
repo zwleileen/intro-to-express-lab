@@ -42,15 +42,36 @@ app.get("/collectibles/:index", (req, res) => {
 });
 //URL is http://localhost:3000/collectibles/0
 
-app.get("/about", (req, res) => {
-  const name = req.query.name;
-  const age = req.query.age;
-  res.send(`You are ${name} and ${age}`);
-});
+//Exercise 4. Filter Shoes by Query Parameters
+app.get("/shoes", (req, res) => {
+  const shoes = [
+    { name: "Birkenstocks", price: 50, type: "sandal" },
+    { name: "Air Jordans", price: 500, type: "sneaker" },
+    { name: "Air Mahomeses", price: 501, type: "sneaker" },
+    { name: "Utility Boots", price: 20, type: "boot" },
+    { name: "Velcro Sandals", price: 15, type: "sandal" },
+    { name: "Jet Boots", price: 1000, type: "boot" },
+    { name: "Fifty-Inch Heels", price: 175, type: "heel" },
+  ];
 
-app.get("/greet/:name", (req, res) => {
-  res.send(`<h1>Hello, ${req.params.name}</h1>`);
+  const minPrice = parseFloat(req.query["min-price"]) || 0;
+  const maxPrice = parseFloat(req.query["max-price"]) || Infinity;
+  const type = req.query.type;
+
+  if (!req.query["min-price"] && !req.query["max-price"] && !req.query.type) {
+    return res.send(shoes); // Return all shoes if no parameters
+  }
+
+  let filterShoes = shoes.filter((shoe) => {
+    return (
+      shoe.price >= minPrice &&
+      shoe.price <= maxPrice &&
+      (!type || shoe.type === type)
+    );
+  });
+  res.send(filterShoes);
 });
+//URL http://localhost:3000/shoes?min-price=50&max-price=600&type=sandal
 
 app.listen(port, () => {
   console.log(`Example app listening on port ${port}`);
