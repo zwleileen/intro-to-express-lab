@@ -54,8 +54,8 @@ app.get("/shoes", (req, res) => {
     { name: "Fifty-Inch Heels", price: 175, type: "heel" },
   ];
 
-  const minPrice = parseFloat(req.query["min-price"]) || 0;
-  const maxPrice = parseFloat(req.query["max-price"]) || Infinity;
+  const minPrice = req.query["min-price"] || 0; //to retrieve min-price, need to use [] instead of dot notation because of the hyphen
+  const maxPrice = req.query["max-price"] || Infinity;
   const type = req.query.type;
 
   if (!req.query["min-price"] && !req.query["max-price"] && !req.query.type) {
